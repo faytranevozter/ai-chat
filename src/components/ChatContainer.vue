@@ -8,6 +8,7 @@ const messages = ref([])
 const isLoading = ref(false)
 const error = ref(null)
 const chatContainerRef = ref(null)
+let messageIdCounter = 0
 
 let genAI = null
 let model = null
@@ -47,7 +48,7 @@ const sendMessage = async (message) => {
   
   // Add user message
   messages.value.push({
-    id: Date.now(),
+    id: ++messageIdCounter,
     role: 'user',
     content: message,
     timestamp: new Date()
@@ -69,7 +70,7 @@ const sendMessage = async (message) => {
     
     // Add AI response
     messages.value.push({
-      id: Date.now() + 1,
+      id: ++messageIdCounter,
       role: 'assistant',
       content: text,
       timestamp: new Date()
@@ -79,7 +80,7 @@ const sendMessage = async (message) => {
   } catch (err) {
     error.value = 'Failed to get response: ' + err.message
     messages.value.push({
-      id: Date.now() + 1,
+      id: ++messageIdCounter,
       role: 'assistant',
       content: 'Sorry, I encountered an error. Please try again.',
       timestamp: new Date(),
@@ -98,7 +99,7 @@ onMounted(() => {
   // Add welcome message
   if (!error.value) {
     messages.value.push({
-      id: Date.now(),
+      id: ++messageIdCounter,
       role: 'assistant',
       content: 'Hello! I\'m your AI assistant powered by Google Gemini. How can I help you today?',
       timestamp: new Date()
